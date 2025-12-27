@@ -1,4 +1,3 @@
-import React from 'react';
 import { useSync } from '../context/SyncContext';
 
 export const StatusBar = () => {

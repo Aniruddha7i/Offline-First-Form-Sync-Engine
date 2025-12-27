@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { SyncProvider } from './context/SyncContext';
 import { StatusBar } from './components/StatusBar';
 import { EntryForm } from './components/EntryForm';
