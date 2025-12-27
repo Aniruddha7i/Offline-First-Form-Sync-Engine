@@ -12,7 +12,8 @@ Base.metadata.create_all(bind=engine)
 app = FastAPI()
 
 # CORS Setup (Allow Frontend to talk to Backend)
-origins = os.getenv("ALLOWED_ORIGINS", "http://localhost:5173").split(",")
+# We use the environment variable, but fallback to your specific Vercel URL for safety
+origins = os.getenv("ALLOWED_ORIGINS", "https://offline-first-form-sync-engine04.vercel.app").split(",")
 
 app.add_middleware(
     CORSMiddleware,
@@ -21,6 +22,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.get("/")
+def read_root():
+    return {"message": "SiteMaster Sync Engine is Running!"}
 
 @app.post("/sync", response_model=SyncResponse)
 def sync(request: SyncRequest, db: Session = Depends(get_db)):
@@ -92,4 +97,5 @@ def sync(request: SyncRequest, db: Session = Depends(get_db)):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run(app, host="0.0.0.0", port=port)
